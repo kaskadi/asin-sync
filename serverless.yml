@@ -37,6 +37,7 @@ functions:
   KaskadiAsinSync:
     handler: kaskadi-asin-sync-lambda.handler
     name: ${self:service.name}
+    timeout: 900
     layers:
       - { Ref: KaskadiAsinSyncLayerLambdaLayer}
     package:
