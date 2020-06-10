@@ -15,10 +15,10 @@ module.exports.handler = async (event) => {
     }
   })
   const eans = esData.body.hits.hits.map(product => product._id)
-  // await es.bulk({
-  //   refresh: true,
-  //   body: Object.entries(await getAsinsMap(eans)).flatMap(entry => [{ update: { _index: 'products', _id: entry[0] } }, { doc: { asin: entry[1] } }])
-  // })
+  await es.bulk({
+    refresh: true,
+    body: Object.entries(await getAsinsMap(eans)).flatMap(entry => [{ update: { _index: 'products', _id: entry[0] } }, { doc: { asin: entry[1] } }])
+  })
   return {
     statusCode: 200,
     headers: {
