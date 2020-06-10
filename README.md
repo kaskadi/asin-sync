@@ -1,5 +1,3 @@
-**This probably won't be a lambda but a standalone script for sporadic usage. See [here](https://github.com/kaskadi/kaskadi-asin-sync-lambda/issues/1).**
-
 ![](https://img.shields.io/github/package-json/v/kaskadi/kaskadi-asin-sync-lambda)
 ![](https://img.shields.io/badge/code--style-standard-blue)
 ![](https://img.shields.io/github/license/kaskadi/kaskadi-asin-sync-lambda?color=blue)
