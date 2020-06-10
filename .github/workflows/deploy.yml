@@ -7,7 +7,7 @@ on:
       - 'release/**'
     paths:
       - 'serverless.yml'
-      - 'kaskadi-get-asins-lambda.js'
+      - 'kaskadi-asin-sync-lambda.js'
       - 'layer/**'
 jobs:
   deploy:
