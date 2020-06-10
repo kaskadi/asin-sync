@@ -37,7 +37,7 @@ functions:
   KaskadiGetAsins:
     handler: kaskadi-get-asins-lambda.handler
     name: ${self:service.name}
-    timeout: 900
+    timeout: 30
     layers:
       - { Ref: KaskadiGetAsinsLayerLambdaLayer}
     package:
