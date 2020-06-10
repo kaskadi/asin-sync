@@ -1,5 +1,5 @@
 service:
-  name: kaskadi-get-asins-lambda
+  name: kaskadi-asin-sync-lambda
 
 package:
   individually: true
@@ -21,7 +21,7 @@ provider:
     type: schedule
 
 layers:
-  KaskadiGetAsinsLayer:
+  KaskadiAsinSyncLayer:
     path: layer
     name: ${self:service.name}-layer
     description: Layer for ${self:service.name}
@@ -34,15 +34,15 @@ layers:
         - '**/**'
 
 functions:
-  KaskadiGetAsins:
-    handler: kaskadi-get-asins-lambda.handler
+  KaskadiAsinSync:
+    handler: kaskadi-asin-sync-lambda.handler
     name: ${self:service.name}
-    timeout: 30
+    timeout: 900
     layers:
-      - { Ref: KaskadiGetAsinsLayerLambdaLayer}
+      - { Ref: KaskadiAsinSyncLayerLambdaLayer}
     package:
       include:
-        - 'kaskadi-get-asins-lambda.js'
+        - 'kaskadi-asin-sync-lambda.js'
         - 'marketplaces.js'
     environment:
       ES_ID: ${env:ES_ID}
@@ -52,9 +52,7 @@ functions:
       SELLER_ID: ${env:SELLER_ID}
       MWS_AUTH_TOKEN: ${env:MWS_AUTH_TOKEN}
     events:
-      - eventBridge:
-          name: ${self:service.name}-eventBridge
-          description: eventBridge to connect ElasticSearch product creation to ${self:service.name}.
-          pattern:
-            source:
-              - aws.es
+      - schedule:
+          rate: cron(0 6 ? * * *) # runs every day at 6:00AM
+          enabled: true
+          
