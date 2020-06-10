@@ -52,6 +52,9 @@ functions:
       SELLER_ID: ${env:SELLER_ID}
       MWS_AUTH_TOKEN: ${env:MWS_AUTH_TOKEN}
     events:
-      - schedule:
-          rate: cron(0 6 ? * * *) # runs every day at 6:00AM
-          enabled: true
+      - eventBridge:
+          name: ${self:service.name}-eventBridge
+          description: eventBridge to connect ElasticSearch product creation to ${self:service.name}.
+          pattern:
+            source:
+              - aws.es
