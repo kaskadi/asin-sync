@@ -17,7 +17,7 @@ provider:
   tags:
     app: kaskadi
     service: ${self:service.name}
-    logical-unit: stocks
+    logical-unit: products
     type: schedule
 
 layers:
