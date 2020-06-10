@@ -1,5 +1,5 @@
 service:
-  name: kaskadi-asin-sync-lambda
+  name: kaskadi-get-asins-lambda
 
 package:
   individually: true
@@ -21,7 +21,7 @@ provider:
     type: schedule
 
 layers:
-  KaskadiAsinSyncLayer:
+  KaskadiGetAsinsLayer:
     path: layer
     name: ${self:service.name}-layer
     description: Layer for ${self:service.name}
@@ -34,15 +34,15 @@ layers:
         - '**/**'
 
 functions:
-  KaskadiAsinSync:
-    handler: kaskadi-asin-sync-lambda.handler
+  KaskadiGetAsins:
+    handler: kaskadi-get-asins-lambda.handler
     name: ${self:service.name}
     timeout: 900
     layers:
-      - { Ref: KaskadiAsinSyncLayerLambdaLayer}
+      - { Ref: KaskadiGetAsinsLayerLambdaLayer}
     package:
       include:
-        - 'kaskadi-asin-sync-lambda.js'
+        - 'kaskadi-get-asins-lambda.js'
         - 'marketplaces.js'
     environment:
       ES_ID: ${env:ES_ID}
