@@ -1,13 +1,10 @@
-# ATTENTION: when done with setting up this file, you can go into .github/workflows/deploy.yml to use the 'deploy -v' command for this action in order to deploy your lambda
-
 service:
-  name: kaskadi-asin-sync-lambda
+  name: kaskadi-get-asins-lambda
 
 package:
   individually: true
   exclude:
-    - '.*/**'
-    - '*'
+    - '**/**'
 
 provider:
   name: aws
@@ -17,24 +14,44 @@ provider:
   region: eu-central-1
   deploymentBucket:
     name: kaskadi-serverless-deployment-bucket
-  # update this section to use proper tags for your lambda
   tags:
-    app: your-app-name
+    app: kaskadi
     service: ${self:service.name}
-    logical-unit: api-logical-unit
-    type: 's3, sns, etc.'
+    logical-unit: stocks
+    type: schedule
 
-functions:
-  KaskadiAsinSync:
-    handler: kaskadi-asin-sync-lambda.handler
-    name: ${self:service.name}
+layers:
+  KaskadiGetAsinsLayer:
+    path: layer
+    name: ${self:service.name}-layer
+    description: Layer for ${self:service.name}
+    compatibleRuntimes:
+      - nodejs10.x
+      - nodejs12.x
+    licenseInfo: MIT
     package:
       include:
-        - 'kaskadi-asin-sync-lambda.js'
-        - 'node_modules/**'
-    # configure here the proper event(s) that should trigger your lambda
+        - '**/**'
+
+functions:
+  KaskadiGetAsins:
+    handler: kaskadi-get-asins-lambda.handler
+    name: ${self:service.name}
+    timeout: 30
+    layers:
+      - { Ref: KaskadiGetAsinsLayerLambdaLayer}
+    package:
+      include:
+        - 'kaskadi-get-asins-lambda.js'
+        - 'marketplaces.js'
+    environment:
+      ES_ID: ${env:ES_ID}
+      ES_SECRET: ${env:ES_SECRET}
+      ES_ENDPOINT: ${env:ES_ENDPOINT}
+      ACCESS_KEY: ${env:AWS_ACCESS_KEY}
+      SELLER_ID: ${env:SELLER_ID}
+      MWS_AUTH_TOKEN: ${env:MWS_AUTH_TOKEN}
     events:
-      - http:
-          method: get
-          path: hello
-          cors: true
+      - schedule:
+          rate: cron(0 6 ? * * *) # runs every day at 6:00AM
+          enabled: true

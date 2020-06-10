@@ -1,5 +1,5 @@
 {
-  "name": "kaskadi-asin-sync-lambda",
+  "name": "kaskadi-get-asins-lambda",
   "version": "1.0.0",
   "description": "",
   "main": "serverless.yml",
