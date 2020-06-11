@@ -57,7 +57,7 @@ async function getPartialAsinsMap(eans) {
     const mwsData = await MWS.products.getMatchingProductForId(reqOpts)
     const results = [mwsData.body.GetMatchingProductForIdResponse.GetMatchingProductForIdResult].flat(1) // when 1 result is returned by MWS, they return a single object instead of an Array...
     results.forEach(productResult => {
-      partialAsinsMap[productResult.Id][marketplace] = productResult.status === 'Success' ? [productResult.Products.Product].flat(1).map(product => product.Identifiers.MarketplaceASIN.ASIN) : []
+      partialAsinsMap[productResult.Id][`amz_${marketplace.toLowerCase()}`] = productResult.status === 'Success' ? [productResult.Products.Product].flat(1).map(product => product.Identifiers.MarketplaceASIN.ASIN) : []
     })
   }
   return partialAsinsMap
