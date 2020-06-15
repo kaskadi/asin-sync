@@ -11,7 +11,7 @@ module.exports = async (eans) => {
 }
 
 async function getPartialAsinsMap(eans) {
-  const marketplaces = require('./marketplaces.js')
+  const marketplaces = require('../marketplaces.js')
   const MWS = require('mws-client')({
     AWSAccessKeyId: process.env.ACCESS_KEY,
     SellerId: process.env.SELLER_ID,
