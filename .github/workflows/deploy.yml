@@ -8,6 +8,7 @@ on:
     paths:
       - 'serverless.yml'
       - 'kaskadi-asin-sync-lambda.js'
+      - 'helpers/**'
       - 'layer/**'
 jobs:
   deploy:
