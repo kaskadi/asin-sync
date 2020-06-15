@@ -4,16 +4,7 @@ module.exports.handler = async (event) => {
     token: process.env.ES_SECRET,
     url: process.env.ES_ENDPOINT
   })
-  const esData = await es.search({
-    index: 'products',
-    body: {
-      from: 0,
-      size: 10000,
-      query: {
-        match_all: {}
-      }
-    }
-  })
+  const esData = await require('./helpers/search-all-products.js')()
   const eans = esData.body.hits.hits.map(product => product._id)
   await es.bulk({
     refresh: true,
@@ -31,6 +22,7 @@ module.exports.handler = async (event) => {
 async function getAsinsMap(eans) {
   let asinsMap = {}
   for (let i=0; i < eans.length + 4; i+=5) {
+    // getMatchingProductForId from the products section of MWS API accepts up to 5 products ID per request
     asinsMap = {
       ...asinsMap,
       ...await getPartialAsinsMap(eans.slice(i, i + 5))
@@ -51,9 +43,9 @@ async function getPartialAsinsMap(eans) {
     const reqOpts = {
       _marketplace: marketplace,
       IdType: 'EAN',
-      ...Object.fromEntries(eans.map((ean, i) => [`IdList.Id.${i + 1}`, ean]))
+      ...Object.fromEntries(eans.map((ean, i) => [`IdList.Id.${i + 1}`, ean])) // mws-client doesn't support array as parameter as of 1.0.0
     }
-    await new Promise((resolve, reject) => setTimeout(resolve, 1000)) // throttling, 5 items per second
+    await new Promise((resolve, reject) => setTimeout(resolve, 1000)) // throttling
     const mwsData = await MWS.products.getMatchingProductForId(reqOpts)
     const results = [mwsData.body.GetMatchingProductForIdResponse.GetMatchingProductForIdResult].flat(1) // when 1 result is returned by MWS, they return a single object instead of an Array...
     results.forEach(productResult => {

@@ -43,6 +43,7 @@ functions:
     package:
       include:
         - 'kaskadi-asin-sync-lambda.js'
+        - 'helpers/**'
         - 'marketplaces.js'
     environment:
       ES_ID: ${env:ES_ID}
