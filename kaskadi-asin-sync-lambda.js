@@ -3,6 +3,6 @@ module.exports.handler = async (event) => {
   const getAsinsMap = require('./helpers/get-asins-map.js')
   const updateAsins = require('./helpers/update-asins.js')
   return await searchAllProduct()
-  .then(esData => getAsinsMap(esData.body.hits.hits.map(product => product._id)))
+  .then(esData => getAsinsMap(esData.map(product => product._id)))
   .then(asinsMap => updateAsins(asinsMap))
 }
