@@ -6,5 +6,3 @@ module.exports.handler = async (event) => {
   .then(esData => getAsinsMap(esData.map(product => product._id)))
   .then(asinsMap => updateAsins(asinsMap))
 }
-
-// force deploy
