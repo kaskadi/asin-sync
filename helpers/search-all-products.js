@@ -17,6 +17,7 @@ module.exports = async () => {
 }
 function searchProducts(from, size) {
   return es.search({
+    index: 'products',
     from,
     size,
     body: {
