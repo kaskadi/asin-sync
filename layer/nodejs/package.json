@@ -1,7 +1,7 @@
 {
-  "name": "kaskadi-asin-sync-lambda-layer",
+  "name": "asin-sync-layer",
   "version": "1.0.0",
-  "description": "Layer for kaskadi-asin-sync-lambda",
+  "description": "Layer for asin-sync",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
